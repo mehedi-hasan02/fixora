@@ -22,3 +22,18 @@ model User {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
+
+
+model ServiceCategory {
+  id                 String   @id @default(cuid())
+  name               String   @unique
+  description        String
+  basePrice          Int
+  estimatedDuration  String
+  icon               String
+  features           String[] @default([])
+  isActive           Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

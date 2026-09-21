@@ -1,13 +1,14 @@
 "use server";
 
 import { prisma } from "../../lib/prisma";
+import { uploadImage } from "../../lib/cloudinary";
 import bcrypt from "bcryptjs";
 
 interface UserPayload {
   name: string;
   email: string;
   password: string;
-  profileImage?: string;
+  image?: File;
 }
 
 interface LoginUser {
@@ -16,7 +17,7 @@ interface LoginUser {
 }
 
 export const postUser = async (payload: UserPayload) => {
-  const { name, email, password } = payload;
+  const { name, email, password, image } = payload;
 
   if (!name || !email || !password) {
     return false;
@@ -30,11 +31,15 @@ export const postUser = async (payload: UserPayload) => {
 
   if (isExist) return false;
 
+  const imageUrl =
+    image && image.size > 0 ? await uploadImage(image, "fixora/users") : null;
+
   const newUser = await prisma.user.create({
     data: {
       name,
       email,
       password: await bcrypt.hash(password, 10),
+      image: imageUrl,
     },
   });
 
@@ -62,6 +67,7 @@ export const loginUser = async (payload: LoginUser) => {
     id: user.id.toString(),
     name: user.name,
     email: user.email,
+    image: user.image,
     role: user.role,
   };
 };

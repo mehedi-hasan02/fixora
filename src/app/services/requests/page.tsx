@@ -1,0 +1,53 @@
+import RequestForm from "@/components/requests/RequestForm";
+import {
+  getServiceCategories,
+  getServiceCategoryById,
+} from "@/action/server/services";
+
+type PageProps = {
+  searchParams: Promise<{
+    serviceId?: string;
+  }>;
+};
+
+const Page = async ({ searchParams }: PageProps) => {
+  const { serviceId } = await searchParams;
+
+  const [categories, selectedService] = await Promise.all([
+    getServiceCategories(),
+    serviceId ? getServiceCategoryById(serviceId) : Promise.resolve(null),
+  ]);
+
+  return (
+    <main className="min-h-screen bg-base-200 px-4 py-10">
+      <div className="mx-auto max-w-3xl">
+        {/* Header */}
+
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold">Request a Service</h1>
+
+          <p className="mt-2 text-base-content/60">
+            {selectedService
+              ? `Book ${selectedService.name} service`
+              : "Tell us about your problem and we will help you find the right service."}
+          </p>
+        </div>
+
+        {/* Request Form */}
+
+        <div
+          className="
+          rounded-2xl
+          bg-base-100
+          p-6
+          shadow-md
+        "
+        >
+          <RequestForm service={selectedService} categories={categories} />
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default Page;

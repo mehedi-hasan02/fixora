@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
-import { loginUser } from "@/action/server/auth";
 import { toast } from "react-toastify";
+import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface LoginFormData {
   email: string;
@@ -16,6 +17,9 @@ interface LoginFormData {
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const route = useRouter();
+  const params = useSearchParams();
+  const callback = params.get("callbackUrl") || "/";
 
   const {
     register,
@@ -25,11 +29,22 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const res = await loginUser(data);
-      if (res) {
-        toast.success("Login user");
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+        callbackUrl: callback,
+      });
+
+      if (result?.ok && !result.error) {
+        toast.success("Login successful");
+        route.push(callback);
+      } else {
+        toast.error("Invalid email or password");
       }
-    } catch (error) {}
+    } catch {
+      toast.error("Something went wrong");
+    }
   };
 
   return (
@@ -38,10 +53,10 @@ const LoginForm = () => {
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2">
           <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-lg">
-            A
+            F
           </div>
 
-          <span className="text-2xl font-bold text-slate-900">AppName</span>
+          <span className="text-2xl font-bold text-slate-900">Fixora</span>
         </Link>
 
         <h1 className="mt-8 text-3xl font-bold text-slate-900">Welcome back</h1>
@@ -56,7 +71,9 @@ const LoginForm = () => {
         {/* Google Login */}
         <button
           type="button"
-          className="w-full h-12 flex items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
+          disabled
+          title="Google sign-in coming soon"
+          className="w-full h-12 flex items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-400 cursor-not-allowed opacity-60 transition"
         >
           <FcGoogle className="text-xl" />
           Continue with Google
@@ -112,21 +129,12 @@ const LoginForm = () => {
 
           {/* Password */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <label
-                htmlFor="password"
-                className="text-sm font-medium text-slate-700"
-              >
-                Password
-              </label>
-
-              <Link
-                href="/forgot-password"
-                className="text-xs font-medium text-slate-900 hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-slate-700 mb-2"
+            >
+              Password
+            </label>
 
             <div className="relative">
               <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -199,7 +207,7 @@ const LoginForm = () => {
 
         {/* Register */}
         <p className="text-center text-sm text-slate-500 mt-6">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/register"
             className="font-semibold text-slate-900 hover:underline"

@@ -45,12 +45,21 @@ const RegisterForm = () => {
 
   const onSubmit = async (user: RegisterFormData) => {
     try {
-      const res = await postUser(user);
+      const res = await postUser({
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        image: user.image?.[0],
+      });
+
       if (res) {
-        toast.success("User create successfull");
+        toast.success("Account created successfully");
         reset();
+        setPreview(null);
+      } else {
+        toast.error("An account with this email already exists");
       }
-    } catch (errors) {
+    } catch {
       toast.error("Something went wrong");
     }
   };
@@ -60,10 +69,10 @@ const RegisterForm = () => {
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2">
           <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-lg">
-            A
+            F
           </div>
 
-          <span className="text-2xl font-bold text-slate-900">AppName</span>
+          <span className="text-2xl font-bold text-slate-900">Fixora</span>
         </Link>
 
         <h1 className="mt-8 text-3xl font-bold text-slate-900">
@@ -80,7 +89,9 @@ const RegisterForm = () => {
         {/* Google */}
         <button
           type="button"
-          className="w-full h-12 flex items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
+          disabled
+          title="Google sign-in coming soon"
+          className="w-full h-12 flex items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-400 cursor-not-allowed opacity-60 transition"
         >
           <FcGoogle className="text-xl" />
           Continue with Google
