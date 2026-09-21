@@ -1,6 +1,7 @@
 "use client";
 
 import { Wrench, Zap, Snowflake, Fan, Paintbrush, Refrigerator } from "lucide-react";
+import { useFormContext } from "react-hook-form";
 import type { ServiceCategoryModel } from "../../../generated/prisma/models";
 
 const iconMap = {
@@ -17,6 +18,11 @@ type ServiceSelectorProps = {
 };
 
 const ServiceSelector = ({ categories }: ServiceSelectorProps) => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
   return (
     <div className="space-y-3">
       <label className="font-semibold">Select Service</label>
@@ -29,9 +35,11 @@ const ServiceSelector = ({ categories }: ServiceSelectorProps) => {
             <label key={category.id} className="cursor-pointer">
               <input
                 type="radio"
-                name="categoryId"
                 value={category.id}
                 className="peer hidden"
+                {...register("categoryId", {
+                  required: "Please select a service",
+                })}
               />
 
               <div
@@ -52,6 +60,12 @@ const ServiceSelector = ({ categories }: ServiceSelectorProps) => {
           );
         })}
       </div>
+
+      {errors.categoryId && (
+        <p className="text-xs text-error">
+          {errors.categoryId.message as string}
+        </p>
+      )}
     </div>
   );
 };

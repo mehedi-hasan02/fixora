@@ -1,23 +1,11 @@
 import RequestCard from "./RequestCard";
+import type { getUserRequests } from "@/action/server/requests";
 
-const RequestList = () => {
-  const requests = [
-    {
-      id: "1",
-      service: "Plumbing",
-      title: "Bathroom tap leaking",
-      status: "PENDING",
-      date: "10 September 2026",
-    },
-    {
-      id: "2",
-      service: "AC Repair",
-      title: "AC is not cooling",
-      status: "APPROVED",
-      date: "12 September 2026",
-    },
-  ];
+type RequestListProps = {
+  requests: Awaited<ReturnType<typeof getUserRequests>>;
+};
 
+const RequestList = ({ requests }: RequestListProps) => {
   return (
     <div className="space-y-4">
       {requests.length === 0 ? (

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { Menu, X, Wrench, LayoutDashboard, LogOut } from "lucide-react";
+import { Menu, X, Wrench, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
 
 const navLinks = [
   { href: "/services", label: "Services" },
@@ -63,6 +63,16 @@ const Navbar = () => {
                 <LayoutDashboard className="h-4 w-4" />
                 Dashboard
               </Link>
+
+              {session.user?.role === "ADMIN" && (
+                <Link
+                  href="/admin/requests"
+                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-muted transition hover:bg-background hover:text-primary"
+                >
+                  <ShieldCheck className="h-4 w-4" />
+                  Admin
+                </Link>
+              )}
 
               <div className="mx-1 h-6 w-px bg-border" />
 
@@ -141,6 +151,18 @@ const Navbar = () => {
                   <LayoutDashboard className="h-4 w-4" />
                   Dashboard
                 </Link>
+
+                {session.user?.role === "ADMIN" && (
+                  <Link
+                    href="/admin/requests"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-muted hover:bg-background"
+                  >
+                    <ShieldCheck className="h-4 w-4" />
+                    Admin
+                  </Link>
+                )}
+
                 <button
                   onClick={() => {
                     setIsOpen(false);

@@ -1,4 +1,8 @@
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+
 import RequestForm from "@/components/requests/RequestForm";
+import authOptions from "@/lib/authOptions";
 import {
   getServiceCategories,
   getServiceCategoryById,
@@ -12,6 +16,16 @@ type PageProps = {
 
 const Page = async ({ searchParams }: PageProps) => {
   const { serviceId } = await searchParams;
+
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    const callbackUrl = serviceId
+      ? `/services/requests?serviceId=${serviceId}`
+      : "/services/requests";
+
+    redirect(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+  }
 
   const [categories, selectedService] = await Promise.all([
     getServiceCategories(),

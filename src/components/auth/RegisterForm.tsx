@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -241,11 +240,11 @@ const RegisterForm = () => {
               {/* Preview */}
               <div className="relative w-16 h-16 rounded-full overflow-hidden bg-background border border-border flex-shrink-0">
                 {preview ? (
-                  <Image
+                  // eslint-disable-next-line @next/next/no-img-element -- blob: preview URLs can't be optimized by next/image
+                  <img
                     src={preview}
                     alt="Profile preview"
-                    fill
-                    className="object-cover"
+                    className="h-full w-full object-cover"
                   />
                 ) : (
                   <FiUser className="absolute inset-0 m-auto text-2xl text-muted" />

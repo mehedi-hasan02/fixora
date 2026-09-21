@@ -21,6 +21,9 @@ model User {
   role       String   @default("USER")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  serviceRequests ServiceRequest[]
+  statusChanges   RequestStatusHistory[]
 }
 
 
@@ -36,4 +39,72 @@ model ServiceCategory {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  serviceRequests ServiceRequest[]
+}
+
+enum RequestStatus {
+  PENDING
+  REVIEWING
+  APPROVED
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+model ServiceRequest {
+  id             String        @id @default(cuid())
+  userId         Int
+  user           User          @relation(fields: [userId], references: [id])
+  categoryId     String
+  category       ServiceCategory @relation(fields: [categoryId], references: [id])
+
+  title          String
+  description    String
+  address        String
+  preferredDate  DateTime
+  preferredTime  String
+  scheduledAt    DateTime?
+
+  status         RequestStatus @default(PENDING)
+  estimatedPrice Int?
+  finalPrice     Int?
+  adminNote      String?
+
+  images         RequestImage[]
+  statusHistory  RequestStatusHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model RequestImage {
+  id        String   @id @default(cuid())
+  requestId String
+  request   ServiceRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  imageUrl  String
+  createdAt DateTime @default(now())
+
+  @@index([requestId])
+}
+
+model RequestStatusHistory {
+  id          String        @id @default(cuid())
+  requestId   String
+  request     ServiceRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  status      RequestStatus
+  note        String?
+  changedById Int?
+  changedBy   User?         @relation(fields: [changedById], references: [id])
+  createdAt   DateTime      @default(now())
+
+  @@index([requestId])
+  @@index([createdAt])
 }

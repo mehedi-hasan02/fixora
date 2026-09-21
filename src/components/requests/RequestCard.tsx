@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+import RequestStatus from "./RequestStatus";
+import type { RequestStatus as RequestStatusType } from "@/lib/requestStatus";
+
 interface RequestCardProps {
   request: {
     id: string;
-    service: string;
     title: string;
-    status: string;
-    date: string;
+    status: RequestStatusType;
+    preferredDate: Date;
+    category: { name: string };
   };
 }
 
@@ -22,28 +25,25 @@ p-5
 shadow-sm
 "
     >
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-3">
         <div>
-          <h3 className="text-lg font-bold">{request.service}</h3>
+          <h3 className="text-lg font-bold">{request.category.name}</h3>
 
           <p className="text-sm text-base-content/70">{request.title}</p>
         </div>
 
-        <div>
-          <span
-            className="
-badge
-badge-primary
-"
-          >
-            {request.status}
-          </span>
-        </div>
+        <RequestStatus status={request.status} />
       </div>
 
       <div className="mt-4 text-sm">
-        Preferred Date:
-        <strong>{request.date}</strong>
+        Preferred Date:{" "}
+        <strong>
+          {new Date(request.preferredDate).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </strong>
       </div>
 
       <Link
