@@ -41,31 +41,31 @@ const ServiceCard = ({
   return (
     <Link
       href={`/services/${id}`}
-      className="group rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl hover:shadow-slate-200/50"
+      className="group rounded-2xl border border-border bg-card p-6 transition-all duration-200 hover:-translate-y-1 hover:border-border hover:shadow-xl hover:shadow-border/50"
     >
-      <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 transition-colors group-hover:bg-slate-900">
-        <Icon className="h-6 w-6 text-slate-700 transition-colors group-hover:text-white" />
+      <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-background transition-colors group-hover:bg-primary">
+        <Icon className="h-6 w-6 text-text transition-colors group-hover:text-white" />
       </div>
 
-      <h3 className="text-xl font-semibold text-slate-900">{name}</h3>
+      <h3 className="text-xl font-semibold text-primary">{name}</h3>
 
-      <p className="mt-2 min-h-[48px] text-sm leading-6 text-slate-600">
+      <p className="mt-2 min-h-[48px] text-sm leading-6 text-muted">
         {description}
       </p>
 
-      <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-5">
+      <div className="mt-6 flex items-center justify-between border-t border-background pt-5">
         <div>
-          <p className="text-xs text-slate-500">Starting from</p>
-          <p className="mt-1 font-semibold text-slate-900">{price}</p>
+          <p className="text-xs text-muted">Starting from</p>
+          <p className="mt-1 font-semibold text-primary">{price}</p>
         </div>
 
-        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+        <div className="flex items-center gap-1.5 text-xs text-muted">
           <Clock className="h-4 w-4" />
           {duration}
         </div>
       </div>
 
-      <div className="mt-5 flex items-center text-sm font-semibold text-slate-900">
+      <div className="mt-5 flex items-center text-sm font-semibold text-primary">
         View service
         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
       </div>

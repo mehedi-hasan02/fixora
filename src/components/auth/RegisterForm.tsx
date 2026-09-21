@@ -68,30 +68,30 @@ const RegisterForm = () => {
       {/* Logo */}
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2">
-          <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-lg">
+          <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-lg">
             F
           </div>
 
-          <span className="text-2xl font-bold text-slate-900">Fixora</span>
+          <span className="text-2xl font-bold text-primary">Fixora</span>
         </Link>
 
-        <h1 className="mt-8 text-3xl font-bold text-slate-900">
+        <h1 className="mt-8 text-3xl font-bold text-primary">
           Create an account
         </h1>
 
-        <p className="mt-2 text-sm text-slate-500">
+        <p className="mt-2 text-sm text-muted">
           Create your account to get started
         </p>
       </div>
 
       {/* Register Card */}
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-8">
+      <div className="bg-card border border-border rounded-2xl shadow-sm p-6 sm:p-8">
         {/* Google */}
         <button
           type="button"
           disabled
           title="Google sign-in coming soon"
-          className="w-full h-12 flex items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white text-sm font-medium text-slate-400 cursor-not-allowed opacity-60 transition"
+          className="w-full h-12 flex items-center justify-center gap-3 rounded-xl border border-border bg-card text-sm font-medium text-muted cursor-not-allowed opacity-60 transition"
         >
           <FcGoogle className="text-xl" />
           Continue with Google
@@ -99,13 +99,13 @@ const RegisterForm = () => {
 
         {/* Divider */}
         <div className="flex items-center gap-4 my-6">
-          <div className="h-px flex-1 bg-slate-200" />
+          <div className="h-px flex-1 bg-border" />
 
-          <span className="text-xs text-slate-400 uppercase">
+          <span className="text-xs text-muted uppercase">
             or continue with email
           </span>
 
-          <div className="h-px flex-1 bg-slate-200" />
+          <div className="h-px flex-1 bg-border" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
@@ -113,13 +113,13 @@ const RegisterForm = () => {
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-slate-700 mb-2"
+              className="block text-sm font-medium text-text mb-2"
             >
               Full name
             </label>
 
             <div className="relative">
-              <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
 
               <input
                 id="name"
@@ -127,9 +127,9 @@ const RegisterForm = () => {
                 placeholder="John Doe"
                 className={`w-full h-12 rounded-xl border ${
                   errors.name
-                    ? "border-red-400"
-                    : "border-slate-300 focus:border-slate-900"
-                } bg-white pl-11 pr-4 text-sm text-slate-900 outline-none focus:ring-4 focus:ring-slate-100 transition`}
+                    ? "border-error"
+                    : "border-border focus:border-primary"
+                } bg-card pl-11 pr-4 text-sm text-primary outline-none focus:ring-4 focus:ring-primary/20 transition`}
                 {...register("name", {
                   required: "Name is required",
                   minLength: {
@@ -141,7 +141,7 @@ const RegisterForm = () => {
             </div>
 
             {errors.name && (
-              <p className="mt-1.5 text-xs text-red-500">
+              <p className="mt-1.5 text-xs text-error">
                 {errors.name.message}
               </p>
             )}
@@ -151,13 +151,13 @@ const RegisterForm = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-slate-700 mb-2"
+              className="block text-sm font-medium text-text mb-2"
             >
               Email address
             </label>
 
             <div className="relative">
-              <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
 
               <input
                 id="email"
@@ -165,9 +165,9 @@ const RegisterForm = () => {
                 placeholder="you@example.com"
                 className={`w-full h-12 rounded-xl border ${
                   errors.email
-                    ? "border-red-400"
-                    : "border-slate-300 focus:border-slate-900"
-                } bg-white pl-11 pr-4 text-sm text-slate-900 outline-none focus:ring-4 focus:ring-slate-100 transition`}
+                    ? "border-error"
+                    : "border-border focus:border-primary"
+                } bg-card pl-11 pr-4 text-sm text-primary outline-none focus:ring-4 focus:ring-primary/20 transition`}
                 {...register("email", {
                   required: "Email is required",
                   pattern: {
@@ -179,7 +179,7 @@ const RegisterForm = () => {
             </div>
 
             {errors.email && (
-              <p className="mt-1.5 text-xs text-red-500">
+              <p className="mt-1.5 text-xs text-error">
                 {errors.email.message}
               </p>
             )}
@@ -189,13 +189,13 @@ const RegisterForm = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-slate-700 mb-2"
+              className="block text-sm font-medium text-text mb-2"
             >
               Password
             </label>
 
             <div className="relative">
-              <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
 
               <input
                 id="password"
@@ -203,9 +203,9 @@ const RegisterForm = () => {
                 placeholder="Create a password"
                 className={`w-full h-12 rounded-xl border ${
                   errors.password
-                    ? "border-red-400"
-                    : "border-slate-300 focus:border-slate-900"
-                } bg-white pl-11 pr-12 text-sm text-slate-900 outline-none focus:ring-4 focus:ring-slate-100 transition`}
+                    ? "border-error"
+                    : "border-border focus:border-primary"
+                } bg-card pl-11 pr-12 text-sm text-primary outline-none focus:ring-4 focus:ring-primary/20 transition`}
                 {...register("password", {
                   required: "Password is required",
                   minLength: {
@@ -218,14 +218,14 @@ const RegisterForm = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-text"
               >
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
 
             {errors.password && (
-              <p className="mt-1.5 text-xs text-red-500">
+              <p className="mt-1.5 text-xs text-error">
                 {errors.password.message}
               </p>
             )}
@@ -233,13 +233,13 @@ const RegisterForm = () => {
 
           {/* Image */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
+            <label className="block text-sm font-medium text-text mb-2">
               Profile image
             </label>
 
             <div className="flex items-center gap-4">
               {/* Preview */}
-              <div className="relative w-16 h-16 rounded-full overflow-hidden bg-slate-100 border border-slate-200 flex-shrink-0">
+              <div className="relative w-16 h-16 rounded-full overflow-hidden bg-background border border-border flex-shrink-0">
                 {preview ? (
                   <Image
                     src={preview}
@@ -248,14 +248,14 @@ const RegisterForm = () => {
                     className="object-cover"
                   />
                 ) : (
-                  <FiUser className="absolute inset-0 m-auto text-2xl text-slate-400" />
+                  <FiUser className="absolute inset-0 m-auto text-2xl text-muted" />
                 )}
               </div>
 
               {/* Upload */}
               <label
                 htmlFor="image"
-                className="flex-1 h-12 border border-dashed border-slate-300 rounded-xl flex items-center justify-center gap-2 text-sm text-slate-500 hover:bg-slate-50 hover:border-slate-400 cursor-pointer transition"
+                className="flex-1 h-12 border border-dashed border-border rounded-xl flex items-center justify-center gap-2 text-sm text-muted hover:bg-background hover:border-muted cursor-pointer transition"
               >
                 <FiUpload />
                 Upload profile image
@@ -276,7 +276,7 @@ const RegisterForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="group w-full h-12 rounded-xl bg-slate-900 text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-slate-800 active:scale-[0.99] transition disabled:opacity-60"
+            className="group w-full h-12 rounded-xl bg-primary text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary-hover active:scale-[0.99] transition disabled:opacity-60"
           >
             {isSubmitting ? "Creating account..." : "Create account"}
 
@@ -287,11 +287,11 @@ const RegisterForm = () => {
         </form>
 
         {/* Login */}
-        <p className="text-center text-sm text-slate-500 mt-6">
+        <p className="text-center text-sm text-muted mt-6">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="font-semibold text-slate-900 hover:underline"
+            className="font-semibold text-primary hover:underline"
           >
             Sign in
           </Link>
@@ -299,13 +299,13 @@ const RegisterForm = () => {
       </div>
 
       {/* Terms */}
-      <p className="text-center text-xs text-slate-400 mt-6">
+      <p className="text-center text-xs text-muted mt-6">
         By creating an account, you agree to our{" "}
-        <Link href="/terms" className="underline hover:text-slate-600">
+        <Link href="/terms" className="underline hover:text-text">
           Terms of Service
         </Link>{" "}
         and{" "}
-        <Link href="/privacy" className="underline hover:text-slate-600">
+        <Link href="/privacy" className="underline hover:text-text">
           Privacy Policy
         </Link>
         .

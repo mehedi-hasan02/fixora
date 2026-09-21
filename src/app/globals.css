@@ -1,23 +1,60 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+@plugin "daisyui/theme" {
+  name: "fixora";
+  default: true;
+  color-scheme: light;
+  --color-base-100: #ffffff;
+  --color-base-200: #f8fafc;
+  --color-base-300: #e2e8f0;
+  --color-base-content: #1f2937;
+  --color-primary: #2563eb;
+  --color-primary-content: #ffffff;
+  --color-secondary: #3b82f6;
+  --color-secondary-content: #ffffff;
+  --color-accent: #60a5fa;
+  --color-accent-content: #1f2937;
+  --color-neutral: #1f2937;
+  --color-neutral-content: #ffffff;
+  --color-info: #3b82f6;
+  --color-info-content: #ffffff;
+  --color-success: #16a34a;
+  --color-success-content: #ffffff;
+  --color-warning: #f59e0b;
+  --color-warning-content: #1f2937;
+  --color-error: #dc2626;
+  --color-error-content: #ffffff;
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --border: 1px;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #1f2937;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: #ffffff;
+  --color-text: #1f2937;
+  --color-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-secondary: #3b82f6;
+  --color-accent: #60a5fa;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-error: #dc2626;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

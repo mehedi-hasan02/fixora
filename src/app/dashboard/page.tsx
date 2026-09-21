@@ -11,13 +11,13 @@ const DashboardPage = async () => {
   }
 
   return (
-    <main className="min-h-screen bg-white px-6 py-10 lg:px-8">
+    <main className="min-h-screen bg-card px-6 py-10 lg:px-8">
       <div className="mx-auto max-w-5xl">
-        <h1 className="text-2xl font-bold text-slate-900">
+        <h1 className="text-2xl font-bold text-primary">
           Welcome back, {session.user?.name}
         </h1>
 
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-muted">
           Track your service requests and account activity here.
         </p>
 
@@ -30,21 +30,21 @@ const DashboardPage = async () => {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="rounded-2xl border border-slate-200 p-5"
+              className="rounded-2xl border border-border p-5"
             >
-              <p className="text-sm text-slate-500">{stat.label}</p>
-              <p className="mt-2 text-2xl font-bold text-slate-900">
+              <p className="text-sm text-muted">{stat.label}</p>
+              <p className="mt-2 text-2xl font-bold text-primary">
                 {stat.value}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="mt-8 rounded-2xl border border-slate-200 p-6">
-          <h2 className="text-lg font-semibold text-slate-900">
+        <div className="mt-8 rounded-2xl border border-border p-6">
+          <h2 className="text-lg font-semibold text-primary">
             Recent requests
           </h2>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-sm text-muted">
             No requests yet.
           </p>
         </div>

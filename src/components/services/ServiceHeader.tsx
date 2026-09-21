@@ -5,11 +5,11 @@ const ServiceHeader = () => {
         Our services
       </p>
 
-      <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+      <h2 className="text-3xl font-bold tracking-tight text-primary sm:text-4xl">
         Browse home repair services
       </h2>
 
-      <p className="mt-3 max-w-2xl text-slate-600">
+      <p className="mt-3 max-w-2xl text-muted">
         Choose a service that matches your problem and get started in just a few
         steps.
       </p>
