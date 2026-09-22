@@ -14,6 +14,7 @@ import {
   FiUser,
 } from "react-icons/fi";
 import { postUser } from "../../action/server/auth";
+import { validateImageFile } from "../../lib/imageValidation";
 import { toast } from "react-toastify";
 
 interface RegisterFormData {
@@ -31,15 +32,25 @@ const RegisterForm = () => {
     register,
     handleSubmit,
     reset,
+    resetField,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
-    if (file) {
-      setPreview(URL.createObjectURL(file));
+    if (!file) return;
+
+    const validationError = validateImageFile(file);
+
+    if (validationError) {
+      toast.error(validationError);
+      resetField("image");
+      setPreview(null);
+      return;
     }
+
+    setPreview(URL.createObjectURL(file));
   };
 
   const onSubmit = async (user: RegisterFormData) => {
@@ -58,8 +69,8 @@ const RegisterForm = () => {
       } else {
         toast.error("An account with this email already exists");
       }
-    } catch {
-      toast.error("Something went wrong");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Something went wrong");
     }
   };
   return (

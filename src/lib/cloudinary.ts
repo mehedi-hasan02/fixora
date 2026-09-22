@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { v2 as cloudinary } from "cloudinary";
+import { validateImageFile } from "./imageValidation";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,6 +9,12 @@ cloudinary.config({
 });
 
 export const uploadImage = async (file: File, folder: string) => {
+  const validationError = validateImageFile(file);
+
+  if (validationError) {
+    throw new Error(validationError);
+  }
+
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 

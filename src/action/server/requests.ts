@@ -2,6 +2,7 @@
 
 import { prisma } from "../../lib/prisma";
 import { uploadImage } from "../../lib/cloudinary";
+import { validateImageFile, MAX_REQUEST_IMAGES } from "../../lib/imageValidation";
 import { requireUser } from "../../lib/auth";
 
 type CreateServiceRequestInput = {
@@ -52,6 +53,22 @@ export const createServiceRequest = async (
   }
 
   const imageFiles = (images ?? []).filter((file) => file.size > 0);
+
+  if (imageFiles.length > MAX_REQUEST_IMAGES) {
+    return {
+      success: false as const,
+      error: `You can upload up to ${MAX_REQUEST_IMAGES} images.`,
+    };
+  }
+
+  for (const file of imageFiles) {
+    const validationError = validateImageFile(file);
+
+    if (validationError) {
+      return { success: false as const, error: validationError };
+    }
+  }
+
   const imageUrls = await Promise.all(
     imageFiles.map((file) => uploadImage(file, "fixora/requests"))
   );

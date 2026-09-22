@@ -1,33 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { UploadCloud, X } from "lucide-react";
 import { useFormContext } from "react-hook-form";
+import { toast } from "react-toastify";
+
+import { validateImageFile, MAX_REQUEST_IMAGES } from "@/lib/imageValidation";
 
 const ImageUploader = () => {
-  const { register, setValue, getValues } = useFormContext();
+  const { register } = useFormContext();
   const [previews, setPreviews] = useState<string[]>([]);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const fileListRegister = register("images");
+  // react-hook-form's setValue() cannot change a file input's submitted
+  // value — it always reads the DOM node's own .files at submit time — so
+  // filtering/removing files has to write back to inputRef.current.files.
+  const { ref: rhfRef, ...restRegister } = register("images");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    fileListRegister.onChange(e);
+  const applyFiles = (files: File[]) => {
+    const dataTransfer = new DataTransfer();
+    files.forEach((file) => dataTransfer.items.add(file));
 
-    const files = e.target.files ? Array.from(e.target.files) : [];
+    if (inputRef.current) {
+      inputRef.current.files = dataTransfer.files;
+    }
+
     setPreviews(files.map((file) => URL.createObjectURL(file)));
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files ? Array.from(e.target.files) : [];
+
+    const validFiles: File[] = [];
+
+    for (const file of selectedFiles) {
+      const validationError = validateImageFile(file);
+
+      if (validationError) {
+        toast.error(`${file.name}: ${validationError}`);
+        continue;
+      }
+
+      validFiles.push(file);
+    }
+
+    if (validFiles.length > MAX_REQUEST_IMAGES) {
+      toast.error(`You can upload up to ${MAX_REQUEST_IMAGES} images.`);
+    }
+
+    applyFiles(validFiles.slice(0, MAX_REQUEST_IMAGES));
+  };
+
   const removeAt = (index: number) => {
-    const currentFiles = Array.from(
-      (getValues("images") as FileList | undefined) ?? []
-    );
+    const currentFiles = Array.from(inputRef.current?.files ?? []);
     currentFiles.splice(index, 1);
-
-    const dataTransfer = new DataTransfer();
-    currentFiles.forEach((file) => dataTransfer.items.add(file));
-
-    setValue("images", dataTransfer.files);
-    setPreviews((prev) => prev.filter((_, i) => i !== index));
+    applyFiles(currentFiles);
   };
 
   return (
@@ -49,15 +76,20 @@ const ImageUploader = () => {
         <UploadCloud size={40} />
 
         <p className="mt-3 text-sm text-base-content/60">
-          Upload photos to help us understand the issue (optional)
+          Upload up to {MAX_REQUEST_IMAGES} photos (JPG, PNG, WEBP, max 5MB
+          each) to help us understand the issue (optional)
         </p>
 
         <input
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp"
           multiple
           className="file-input file-input-bordered mt-4"
-          {...fileListRegister}
+          {...restRegister}
+          ref={(el) => {
+            rhfRef(el);
+            inputRef.current = el;
+          }}
           onChange={handleChange}
         />
       </div>
