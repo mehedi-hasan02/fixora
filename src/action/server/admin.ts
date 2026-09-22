@@ -13,6 +13,51 @@ export const getAllRequests = async () => {
   });
 };
 
+export const getAdminDashboardStats = async () => {
+  await requireAdmin();
+
+  const [
+    totalRequests,
+    pending,
+    active,
+    completed,
+    closed,
+    totalUsers,
+    totalCategories,
+    recentRequests,
+  ] = await Promise.all([
+    prisma.serviceRequest.count(),
+    prisma.serviceRequest.count({
+      where: { status: { in: ["PENDING", "REVIEWING"] } },
+    }),
+    prisma.serviceRequest.count({
+      where: { status: { in: ["APPROVED", "SCHEDULED", "IN_PROGRESS"] } },
+    }),
+    prisma.serviceRequest.count({ where: { status: "COMPLETED" } }),
+    prisma.serviceRequest.count({
+      where: { status: { in: ["CANCELLED", "REJECTED"] } },
+    }),
+    prisma.user.count({ where: { role: "USER" } }),
+    prisma.serviceCategory.count({ where: { isActive: true } }),
+    prisma.serviceRequest.findMany({
+      take: 5,
+      orderBy: { createdAt: "desc" },
+      include: { category: true, user: true },
+    }),
+  ]);
+
+  return {
+    totalRequests,
+    pending,
+    active,
+    completed,
+    closed,
+    totalUsers,
+    totalCategories,
+    recentRequests,
+  };
+};
+
 export const getAdminRequestById = async (id: string) => {
   await requireAdmin();
 

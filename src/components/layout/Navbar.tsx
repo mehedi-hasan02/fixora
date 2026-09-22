@@ -6,15 +6,20 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { Menu, X, Wrench, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
 
-const navLinks = [
-  { href: "/services", label: "Services" },
-  { href: "/services/requests", label: "Request Service" },
-];
-
 const Navbar = () => {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+
+  const isAdmin = session?.user?.role === "ADMIN";
+  const dashboardHref = isAdmin ? "/admin" : "/dashboard";
+
+  const links = isAdmin
+    ? []
+    : [
+        { href: "/services", label: "Services" },
+        { href: "/services/requests", label: "Request Service" },
+      ];
 
   const isActive = (href: string) => pathname === href;
 
@@ -26,7 +31,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href={isAdmin ? "/admin" : "/"} className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white">
             <Wrench className="h-4.5 w-4.5" />
           </div>
@@ -35,7 +40,7 @@ const Navbar = () => {
 
         {/* Desktop links */}
         <div className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => (
+          {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -57,22 +62,16 @@ const Navbar = () => {
           ) : session ? (
             <>
               <Link
-                href="/dashboard"
+                href={dashboardHref}
                 className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-muted transition hover:bg-background hover:text-primary"
               >
-                <LayoutDashboard className="h-4 w-4" />
-                Dashboard
-              </Link>
-
-              {session.user?.role === "ADMIN" && (
-                <Link
-                  href="/admin/requests"
-                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-muted transition hover:bg-background hover:text-primary"
-                >
+                {isAdmin ? (
                   <ShieldCheck className="h-4 w-4" />
-                  Admin
-                </Link>
-              )}
+                ) : (
+                  <LayoutDashboard className="h-4 w-4" />
+                )}
+                {isAdmin ? "Admin Dashboard" : "Dashboard"}
+              </Link>
 
               <div className="mx-1 h-6 w-px bg-border" />
 
@@ -124,7 +123,7 @@ const Navbar = () => {
       {isOpen && (
         <div className="border-t border-border bg-card px-6 py-4 md:hidden">
           <div className="flex flex-col gap-1">
-            {navLinks.map((link) => (
+            {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -144,24 +143,17 @@ const Navbar = () => {
             {status === "loading" ? null : session ? (
               <>
                 <Link
-                  href="/dashboard"
+                  href={dashboardHref}
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-muted hover:bg-background"
                 >
-                  <LayoutDashboard className="h-4 w-4" />
-                  Dashboard
-                </Link>
-
-                {session.user?.role === "ADMIN" && (
-                  <Link
-                    href="/admin/requests"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-muted hover:bg-background"
-                  >
+                  {isAdmin ? (
                     <ShieldCheck className="h-4 w-4" />
-                    Admin
-                  </Link>
-                )}
+                  ) : (
+                    <LayoutDashboard className="h-4 w-4" />
+                  )}
+                  {isAdmin ? "Admin Dashboard" : "Dashboard"}
+                </Link>
 
                 <button
                   onClick={() => {

@@ -1,8 +1,11 @@
 // src/app/services/[id]/page.tsx
 
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import { ArrowLeft, Wrench } from "lucide-react";
 
+import authOptions from "@/lib/authOptions";
 import { getServiceCategoryById } from "@/action/server/services";
 import ServiceDetailHeader from "@/components/services/details/ServiceDetailHeader";
 import ServiceDetailInfo from "@/components/services/details/ServiceDetailInfo";
@@ -18,6 +21,12 @@ type PageProps = {
 
 const Page = async ({ params }: PageProps) => {
   const { id } = await params;
+
+  const session = await getServerSession(authOptions);
+
+  if (session?.user.role === "ADMIN") {
+    redirect("/admin");
+  }
 
   const service = await getServiceCategoryById(id);
 

@@ -19,6 +19,10 @@ export const createServiceRequest = async (
 ) => {
   const user = await requireUser();
 
+  if (user.role === "ADMIN") {
+    return { success: false as const, error: "Admins cannot submit service requests." };
+  }
+
   const { categoryId, title, description, address, preferredDate, preferredTime, images } =
     input;
 

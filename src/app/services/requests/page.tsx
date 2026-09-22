@@ -27,6 +27,10 @@ const Page = async ({ searchParams }: PageProps) => {
     redirect(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   }
 
+  if (session.user.role === "ADMIN") {
+    redirect("/admin");
+  }
+
   const [categories, selectedService] = await Promise.all([
     getServiceCategories(),
     serviceId ? getServiceCategoryById(serviceId) : Promise.resolve(null),

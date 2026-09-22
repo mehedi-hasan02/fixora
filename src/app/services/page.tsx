@@ -1,12 +1,21 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import { ShieldCheck, ArrowRight } from "lucide-react";
 
+import authOptions from "@/lib/authOptions";
 import ServiceHeader from "@/components/services/ServiceHeader";
 import ServiceSearch from "@/components/services/ServiceSearch";
 import ServiceGrid from "@/components/services/ServiceGrid";
 import ServiceInfo from "@/components/services/ServiceInfo";
 
-const page = () => {
+const page = async () => {
+  const session = await getServerSession(authOptions);
+
+  if (session?.user.role === "ADMIN") {
+    redirect("/admin");
+  }
+
   return (
     <main className="min-h-screen bg-card">
       {/* Hero */}

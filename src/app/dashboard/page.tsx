@@ -13,6 +13,10 @@ const DashboardPage = async () => {
     redirect("/login?callbackUrl=/dashboard");
   }
 
+  if (session.user.role === "ADMIN") {
+    redirect("/admin");
+  }
+
   const [stats, requests] = await Promise.all([
     getDashboardStats(),
     getUserRequests(),
