@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { motion, AnimatePresence } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
 import {
   FiArrowRight,
@@ -15,6 +16,7 @@ import {
 } from "react-icons/fi";
 import { postUser } from "../../action/server/auth";
 import { validateImageFile } from "../../lib/imageValidation";
+import { fadeInUp, fieldTransition } from "../../lib/motion";
 import { toast } from "react-toastify";
 
 interface RegisterFormData {
@@ -74,7 +76,13 @@ const RegisterForm = () => {
     }
   };
   return (
-    <div className="w-full max-w-md">
+    <motion.div
+      className="w-full max-w-md"
+      initial="hidden"
+      animate="visible"
+      variants={fadeInUp}
+      transition={fieldTransition}
+    >
       {/* Logo */}
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2">
@@ -150,11 +158,19 @@ const RegisterForm = () => {
               />
             </div>
 
-            {errors.name && (
-              <p className="mt-1.5 text-xs text-error">
-                {errors.name.message}
-              </p>
-            )}
+            <AnimatePresence>
+              {errors.name && (
+                <motion.p
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-1.5 text-xs text-error"
+                >
+                  {errors.name.message}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Email */}
@@ -188,11 +204,19 @@ const RegisterForm = () => {
               />
             </div>
 
-            {errors.email && (
-              <p className="mt-1.5 text-xs text-error">
-                {errors.email.message}
-              </p>
-            )}
+            <AnimatePresence>
+              {errors.email && (
+                <motion.p
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-1.5 text-xs text-error"
+                >
+                  {errors.email.message}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Password */}
@@ -225,20 +249,30 @@ const RegisterForm = () => {
                 })}
               />
 
-              <button
+              <motion.button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-text"
+                whileTap={{ scale: 0.85 }}
+                style={{ y: "-50%" }}
+                className="absolute right-4 top-1/2 text-muted hover:text-text"
               >
                 {showPassword ? <FiEyeOff /> : <FiEye />}
-              </button>
+              </motion.button>
             </div>
 
-            {errors.password && (
-              <p className="mt-1.5 text-xs text-error">
-                {errors.password.message}
-              </p>
-            )}
+            <AnimatePresence>
+              {errors.password && (
+                <motion.p
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-1.5 text-xs text-error"
+                >
+                  {errors.password.message}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Image */}
@@ -250,16 +284,25 @@ const RegisterForm = () => {
             <div className="flex items-center gap-4">
               {/* Preview */}
               <div className="relative w-16 h-16 rounded-full overflow-hidden bg-background border border-border flex-shrink-0">
-                {preview ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- blob: preview URLs can't be optimized by next/image
-                  <img
-                    src={preview}
-                    alt="Profile preview"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <FiUser className="absolute inset-0 m-auto text-2xl text-muted" />
-                )}
+                <AnimatePresence mode="wait">
+                  {preview ? (
+                    <motion.img
+                      key="preview"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.2 }}
+                      src={preview}
+                      alt="Profile preview"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <FiUser
+                      key="placeholder"
+                      className="absolute inset-0 m-auto text-2xl text-muted"
+                    />
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Upload */}
@@ -283,17 +326,19 @@ const RegisterForm = () => {
           </div>
 
           {/* Submit */}
-          <button
+          <motion.button
             type="submit"
             disabled={isSubmitting}
-            className="group w-full h-12 rounded-xl bg-primary text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary-hover active:scale-[0.99] transition disabled:opacity-60"
+            whileHover={!isSubmitting ? { scale: 1.02 } : undefined}
+            whileTap={!isSubmitting ? { scale: 0.97 } : undefined}
+            className="group w-full h-12 rounded-xl bg-primary text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary-hover transition-colors disabled:opacity-60"
           >
             {isSubmitting ? "Creating account..." : "Create account"}
 
             {!isSubmitting && (
               <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
             )}
-          </button>
+          </motion.button>
         </form>
 
         {/* Login */}
@@ -320,7 +365,7 @@ const RegisterForm = () => {
         </Link>
         .
       </p>
-    </div>
+    </motion.div>
   );
 };
 

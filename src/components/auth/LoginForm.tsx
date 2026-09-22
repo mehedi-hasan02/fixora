@@ -3,11 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { motion, AnimatePresence } from "framer-motion";
 import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { fadeInUp, fieldTransition } from "@/lib/motion";
 
 interface LoginFormData {
   email: string;
@@ -48,7 +50,13 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="w-full max-w-md">
+    <motion.div
+      className="w-full max-w-md"
+      initial="hidden"
+      animate="visible"
+      variants={fadeInUp}
+      transition={fieldTransition}
+    >
       {/* Logo / Brand */}
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2">
@@ -120,11 +128,19 @@ const LoginForm = () => {
               />
             </div>
 
-            {errors.email && (
-              <p className="mt-1.5 text-xs text-error">
-                {errors.email.message}
-              </p>
-            )}
+            <AnimatePresence>
+              {errors.email && (
+                <motion.p
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-1.5 text-xs text-error"
+                >
+                  {errors.email.message}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Password */}
@@ -157,21 +173,31 @@ const LoginForm = () => {
                 })}
               />
 
-              <button
+              <motion.button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted hover:text-text transition"
+                whileTap={{ scale: 0.85 }}
+                style={{ y: "-50%" }}
+                className="absolute right-4 top-1/2 text-muted hover:text-text transition"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <FiEyeOff /> : <FiEye />}
-              </button>
+              </motion.button>
             </div>
 
-            {errors.password && (
-              <p className="mt-1.5 text-xs text-error">
-                {errors.password.message}
-              </p>
-            )}
+            <AnimatePresence>
+              {errors.password && (
+                <motion.p
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-1.5 text-xs text-error"
+                >
+                  {errors.password.message}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Remember Me */}
@@ -192,17 +218,19 @@ const LoginForm = () => {
           </div>
 
           {/* Submit */}
-          <button
+          <motion.button
             type="submit"
             disabled={isSubmitting}
-            className="group w-full h-12 rounded-xl bg-primary text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary-hover active:scale-[0.99] transition disabled:opacity-60 disabled:cursor-not-allowed"
+            whileHover={!isSubmitting ? { scale: 1.02 } : undefined}
+            whileTap={!isSubmitting ? { scale: 0.97 } : undefined}
+            className="group w-full h-12 rounded-xl bg-primary text-white text-sm font-semibold flex items-center justify-center gap-2 hover:bg-primary-hover transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isSubmitting ? "Signing in..." : "Sign in"}
 
             {!isSubmitting && (
               <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
             )}
-          </button>
+          </motion.button>
         </form>
 
         {/* Register */}
@@ -229,7 +257,7 @@ const LoginForm = () => {
         </Link>
         .
       </p>
-    </div>
+    </motion.div>
   );
 };
 

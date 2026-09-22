@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import NextAuthProvider from "../provider/NextAuthProvider";
 import HotTosterProdiver from "../provider/HotTosterProvider";
@@ -29,11 +30,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
         <body className="min-h-full flex flex-col">
-          <Navbar />
-          <main className="flex-1">
-            {children}
-            <HotTosterProdiver />
-          </main>
+          <MotionConfig reducedMotion="user">
+            <Navbar />
+            <main className="flex-1">
+              {children}
+              <HotTosterProdiver />
+            </main>
+          </MotionConfig>
         </body>
       </html>
     </NextAuthProvider>
