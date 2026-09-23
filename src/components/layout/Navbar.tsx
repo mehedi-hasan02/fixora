@@ -17,6 +17,7 @@ const Navbar = () => {
   const links = isAdmin
     ? []
     : [
+        { href: "/", label: "Home" },
         { href: "/services", label: "Services" },
         { href: "/services/requests", label: "Request Service" },
       ];
