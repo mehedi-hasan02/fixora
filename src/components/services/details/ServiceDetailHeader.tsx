@@ -1,9 +1,11 @@
 // src/components/services/details/ServiceDetailHeader.tsx
 
 import Link from "next/link";
-import { ArrowLeft, Wrench } from "lucide-react";
+import Image from "next/image";
+import { ArrowLeft } from "lucide-react";
 
 import type { ServiceCategoryModel } from "../../../../generated/prisma/models";
+import { getServiceImage } from "@/lib/serviceImages";
 
 type Props = {
   service: ServiceCategoryModel;
@@ -22,8 +24,13 @@ const ServiceDetailHeader = ({ service }: Props) => {
         </Link>
 
         <div className="flex flex-col gap-6 md:flex-row md:items-center">
-          <div className="flex size-20 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <Wrench className="size-10" />
+          <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-2xl md:h-32 md:w-48">
+            <Image
+              src={getServiceImage(service.icon)}
+              alt={service.name}
+              fill
+              className="object-cover"
+            />
           </div>
 
           <div>

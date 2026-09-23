@@ -10,10 +10,12 @@ type RevealProps = {
   className?: string;
   delay?: number;
   y?: number;
+  id?: string;
 };
 
-const Reveal = ({ children, className, delay = 0, y = 20 }: RevealProps) => (
+const Reveal = ({ children, className, delay = 0, y = 20, id }: RevealProps) => (
   <motion.div
+    id={id}
     initial={{ opacity: 0, y }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, amount: 0.2 }}

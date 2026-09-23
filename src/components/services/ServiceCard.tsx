@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   Wrench,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { easeOut } from "@/lib/motion";
+import { getServiceImage } from "@/lib/serviceImages";
 
 type Service = {
   id: string;
@@ -55,33 +57,44 @@ const ServiceCard = ({
     >
       <Link
         href={`/services/${id}`}
-        className="group block rounded-2xl border border-border bg-card p-6 transition-shadow duration-200 hover:border-border hover:shadow-xl hover:shadow-border/50"
+        className="group block overflow-hidden rounded-2xl border border-border bg-card transition-shadow duration-200 hover:border-border hover:shadow-xl hover:shadow-border/50"
       >
-        <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-background transition-colors group-hover:bg-primary">
-          <Icon className="h-6 w-6 text-text transition-colors group-hover:text-white" />
-        </div>
-
-        <h3 className="text-xl font-semibold text-primary">{name}</h3>
-
-        <p className="mt-2 min-h-[48px] text-sm leading-6 text-muted">
-          {description}
-        </p>
-
-        <div className="mt-6 flex items-center justify-between border-t border-background pt-5">
-          <div>
-            <p className="text-xs text-muted">Starting from</p>
-            <p className="mt-1 font-semibold text-primary">{price}</p>
-          </div>
-
-          <div className="flex items-center gap-1.5 text-xs text-muted">
-            <Clock className="h-4 w-4" />
-            {duration}
+        <div className="relative h-36 w-full overflow-hidden">
+          <Image
+            src={getServiceImage(icon)}
+            alt=""
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          <div className="absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white/90 backdrop-blur-sm">
+            <Icon className="h-5 w-5 text-primary" />
           </div>
         </div>
 
-        <div className="mt-5 flex items-center text-sm font-semibold text-primary">
-          View service
-          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+        <div className="p-6">
+          <h3 className="text-xl font-semibold text-primary">{name}</h3>
+
+          <p className="mt-2 min-h-12 text-sm leading-6 text-muted">
+            {description}
+          </p>
+
+          <div className="mt-6 flex items-center justify-between border-t border-background pt-5">
+            <div>
+              <p className="text-xs text-muted">Starting from</p>
+              <p className="mt-1 font-semibold text-primary">{price}</p>
+            </div>
+
+            <div className="flex items-center gap-1.5 text-xs text-muted">
+              <Clock className="h-4 w-4" />
+              {duration}
+            </div>
+          </div>
+
+          <div className="mt-5 flex items-center text-sm font-semibold text-primary">
+            View service
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </div>
         </div>
       </Link>
     </motion.div>

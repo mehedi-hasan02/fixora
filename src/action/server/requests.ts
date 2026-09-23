@@ -114,7 +114,7 @@ export const getDashboardStats = async () => {
   const user = await requireUser();
   const userId = Number(user.id);
 
-  const [total, pending, inProgress, completed] = await Promise.all([
+  const [total, pending, inProgress, completed, totalSpent] = await Promise.all([
     prisma.serviceRequest.count({ where: { userId } }),
     prisma.serviceRequest.count({
       where: { userId, status: { in: ["PENDING", "REVIEWING"] } },
@@ -123,9 +123,19 @@ export const getDashboardStats = async () => {
       where: { userId, status: { in: ["APPROVED", "SCHEDULED", "IN_PROGRESS"] } },
     }),
     prisma.serviceRequest.count({ where: { userId, status: "COMPLETED" } }),
+    prisma.serviceRequest.aggregate({
+      where: { userId, status: "COMPLETED" },
+      _sum: { finalPrice: true },
+    }),
   ]);
 
-  return { total, pending, inProgress, completed };
+  return {
+    total,
+    pending,
+    inProgress,
+    completed,
+    totalSpent: totalSpent._sum.finalPrice ?? 0,
+  };
 };
 
 export const getRequestById = async (id: string) => {

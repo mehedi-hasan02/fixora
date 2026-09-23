@@ -1,20 +1,13 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import {
-  ClipboardList,
-  Clock,
-  Loader2,
-  CheckCircle2,
-  XCircle,
-  Users,
-  LayoutGrid,
-  ArrowRight,
-} from "lucide-react";
+import { ClipboardList, Clock, CheckCircle2, Wallet, ArrowRight } from "lucide-react";
 
 import authOptions from "@/lib/authOptions";
 import { getAdminDashboardStats } from "@/action/server/admin";
 import RequestStatus from "@/components/requests/RequestStatus";
+import RequestOverviewChart from "@/components/admin/RequestOverviewChart";
+import RequestStatusDonut from "@/components/admin/RequestStatusDonut";
 
 const AdminDashboardPage = async () => {
   const session = await getServerSession(authOptions);
@@ -37,16 +30,10 @@ const AdminDashboardPage = async () => {
       accent: "bg-primary/10 text-primary",
     },
     {
-      label: "Needs Review",
+      label: "Pending",
       value: stats.pending,
       icon: Clock,
       accent: "bg-warning/10 text-warning",
-    },
-    {
-      label: "In Progress",
-      value: stats.active,
-      icon: Loader2,
-      accent: "bg-secondary/10 text-secondary",
     },
     {
       label: "Completed",
@@ -55,22 +42,10 @@ const AdminDashboardPage = async () => {
       accent: "bg-success/10 text-success",
     },
     {
-      label: "Cancelled / Rejected",
-      value: stats.closed,
-      icon: XCircle,
-      accent: "bg-error/10 text-error",
-    },
-    {
-      label: "Customers",
-      value: stats.totalUsers,
-      icon: Users,
+      label: "Total Revenue",
+      value: `৳${stats.totalRevenue}`,
+      icon: Wallet,
       accent: "bg-accent/10 text-accent",
-    },
-    {
-      label: "Active Services",
-      value: stats.totalCategories,
-      icon: LayoutGrid,
-      accent: "bg-primary/10 text-primary",
     },
   ];
 
@@ -109,6 +84,29 @@ const AdminDashboardPage = async () => {
               </p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-8 grid gap-4 lg:grid-cols-5">
+          <div className="rounded-2xl border border-border p-6 lg:col-span-3">
+            <h2 className="text-lg font-semibold text-primary">
+              Request Overview
+            </h2>
+            <p className="text-xs text-muted">Last 7 days</p>
+
+            <div className="mt-4">
+              <RequestOverviewChart data={stats.dailyCounts} />
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-border p-6 lg:col-span-2">
+            <h2 className="text-lg font-semibold text-primary">
+              Request Status
+            </h2>
+
+            <div className="mt-6">
+              <RequestStatusDonut counts={stats.statusCounts} />
+            </div>
+          </div>
         </div>
 
         <div className="mt-8 rounded-2xl border border-border p-6">

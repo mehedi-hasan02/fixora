@@ -2,7 +2,11 @@
 
 import { prisma } from "../../lib/prisma";
 import { requireAdmin } from "../../lib/auth";
-import { canTransition, type RequestStatus } from "../../lib/requestStatus";
+import {
+  canTransition,
+  REQUEST_STATUSES,
+  type RequestStatus,
+} from "../../lib/requestStatus";
 
 export const getAllRequests = async () => {
   await requireAdmin();
@@ -16,6 +20,10 @@ export const getAllRequests = async () => {
 export const getAdminDashboardStats = async () => {
   await requireAdmin();
 
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+  sevenDaysAgo.setHours(0, 0, 0, 0);
+
   const [
     totalRequests,
     pending,
@@ -24,7 +32,10 @@ export const getAdminDashboardStats = async () => {
     closed,
     totalUsers,
     totalCategories,
+    totalRevenue,
     recentRequests,
+    statusGroups,
+    lastWeekRequests,
   ] = await Promise.all([
     prisma.serviceRequest.count(),
     prisma.serviceRequest.count({
@@ -39,12 +50,49 @@ export const getAdminDashboardStats = async () => {
     }),
     prisma.user.count({ where: { role: "USER" } }),
     prisma.serviceCategory.count({ where: { isActive: true } }),
+    prisma.serviceRequest.aggregate({
+      where: { status: "COMPLETED" },
+      _sum: { finalPrice: true },
+    }),
     prisma.serviceRequest.findMany({
       take: 5,
       orderBy: { createdAt: "desc" },
       include: { category: true, user: true },
     }),
+    prisma.serviceRequest.groupBy({
+      by: ["status"],
+      _count: { _all: true },
+    }),
+    prisma.serviceRequest.findMany({
+      where: { createdAt: { gte: sevenDaysAgo } },
+      select: { createdAt: true },
+    }),
   ]);
+
+  const statusCounts = Object.fromEntries(
+    REQUEST_STATUSES.map((status) => [status, 0])
+  ) as Record<RequestStatus, number>;
+
+  for (const group of statusGroups) {
+    statusCounts[group.status] = group._count._all;
+  }
+
+  const dailyCounts: { date: string; count: number }[] = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const day = new Date(sevenDaysAgo);
+    day.setDate(sevenDaysAgo.getDate() + (6 - i));
+    const dayKey = day.toDateString();
+
+    const count = lastWeekRequests.filter(
+      (r) => r.createdAt.toDateString() === dayKey
+    ).length;
+
+    dailyCounts.push({
+      date: day.toLocaleDateString("en-US", { weekday: "short" }),
+      count,
+    });
+  }
 
   return {
     totalRequests,
@@ -54,7 +102,10 @@ export const getAdminDashboardStats = async () => {
     closed,
     totalUsers,
     totalCategories,
+    totalRevenue: totalRevenue._sum.finalPrice ?? 0,
     recentRequests,
+    statusCounts,
+    dailyCounts,
   };
 };
 

@@ -53,6 +53,8 @@
   --color-success: #16a34a;
   --color-warning: #f59e0b;
   --color-error: #dc2626;
+  --color-navy: #0b2247;
+  --color-navy-light: #123a75;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

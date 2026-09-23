@@ -23,7 +23,12 @@ const Navbar = () => {
 
   const isActive = (href: string) => pathname === href;
 
-  if (pathname === "/login" || pathname === "/register") {
+  if (
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/admin")
+  ) {
     return null;
   }
 
