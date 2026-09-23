@@ -11,12 +11,16 @@ import {
   LayoutDashboard,
   ListChecks,
   PlusCircle,
+  Bell,
+  History,
+  UserCircle,
 } from "lucide-react";
 
 const NAV_CONFIG = {
   dashboard: [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/dashboard#requests", label: "My Requests", icon: ListChecks },
+    { href: "/dashboard/history", label: "History", icon: History },
     { href: "/services/requests", label: "New Request", icon: PlusCircle },
   ],
   admin: [
@@ -24,6 +28,13 @@ const NAV_CONFIG = {
     { href: "/admin/requests", label: "Requests", icon: ListChecks },
   ],
 } as const;
+
+// Screens designed but not built yet — shown as disabled so the nav matches
+// the mockup without linking to pages that don't exist.
+const DASHBOARD_SOON_ITEMS = [
+  { label: "Notifications", icon: Bell },
+  { label: "Profile", icon: UserCircle },
+] as const;
 
 type SidebarProps = {
   variant: keyof typeof NAV_CONFIG;
@@ -38,7 +49,12 @@ const Sidebar = ({ variant, showProfile = false, roleBadge }: SidebarProps) => {
 
   const isActive = (href: string) => {
     const base = href.split("#")[0];
-    return base === "/" ? pathname === base : pathname.startsWith(base);
+    // Index routes ("/dashboard", "/admin") need an exact match so they
+    // don't also light up on nested routes like "/dashboard/history".
+    if (base === "/" || base === "/dashboard" || base === "/admin") {
+      return pathname === base;
+    }
+    return pathname.startsWith(base);
   };
 
   return (
@@ -90,6 +106,21 @@ const Sidebar = ({ variant, showProfile = false, roleBadge }: SidebarProps) => {
             </Link>
           );
         })}
+
+        {variant === "dashboard" &&
+          DASHBOARD_SOON_ITEMS.map((item) => (
+            <div
+              key={item.label}
+              title="Coming soon"
+              className="flex cursor-not-allowed items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted/50"
+            >
+              <item.icon className="h-4.5 w-4.5" />
+              {item.label}
+              <span className="ml-auto rounded-full bg-background px-2 py-0.5 text-[10px] font-semibold text-muted/70">
+                Soon
+              </span>
+            </div>
+          ))}
       </nav>
 
       <div className="px-4 pb-6">

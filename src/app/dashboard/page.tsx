@@ -10,6 +10,16 @@ import RequestList from "@/components/requests/RequestList";
 import Reveal from "@/components/motion/Reveal";
 import MotionPress from "@/components/motion/MotionPress";
 
+const ONGOING_STATUSES = ["PENDING", "REVIEWING", "APPROVED", "SCHEDULED", "IN_PROGRESS"];
+
+const getGreeting = () => {
+  const hour = new Date().getHours();
+
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+};
+
 const DashboardPage = async () => {
   const session = await getServerSession(authOptions);
 
@@ -26,27 +36,24 @@ const DashboardPage = async () => {
     getUserRequests(),
   ]);
 
-  const recentRequests = requests.slice(0, 5);
+  const ongoingRequests = requests
+    .filter((request) => ONGOING_STATUSES.includes(request.status))
+    .slice(0, 4);
+
+  const firstName = session.user?.name?.split(" ")[0] ?? "there";
 
   return (
     <main className="min-h-screen bg-card px-6 py-10 lg:px-8">
       <div className="mx-auto max-w-5xl">
-        <Reveal className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-primary">
-              Welcome back, {session.user?.name}
-            </h1>
+        <Reveal>
+          <h1 className="text-2xl font-bold text-primary">Dashboard</h1>
 
-            <p className="mt-1 text-sm text-muted">
-              Track your service requests and account activity here.
-            </p>
-          </div>
-
-          <MotionPress className="inline-block">
-            <Link href="/services/requests" className="btn btn-primary">
-              New Request
-            </Link>
-          </MotionPress>
+          <p className="mt-3 text-lg font-semibold text-text">
+            {getGreeting()}, {firstName} 👋
+          </p>
+          <p className="mt-1 text-sm text-muted">
+            Here&apos;s what&apos;s happening with your services.
+          </p>
         </Reveal>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -99,12 +106,21 @@ const DashboardPage = async () => {
           id="requests"
           className="mt-8 scroll-mt-8 rounded-2xl border border-border p-6"
         >
-          <h2 className="text-lg font-semibold text-primary">
-            Recent requests
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-primary">
+              Ongoing Requests
+            </h2>
+
+            <Link
+              href="/dashboard/history"
+              className="text-sm font-medium text-primary hover:underline"
+            >
+              View all
+            </Link>
+          </div>
 
           <div className="mt-4">
-            <RequestList requests={recentRequests} />
+            <RequestList requests={ongoingRequests} />
           </div>
         </Reveal>
 

@@ -1,53 +1,72 @@
 import Link from "next/link";
-import Image from "next/image";
+import {
+  Wrench,
+  Zap,
+  Snowflake,
+  Fan,
+  Paintbrush,
+  Refrigerator,
+} from "lucide-react";
 
 import RequestStatus from "./RequestStatus";
 import type { RequestStatus as RequestStatusType } from "@/lib/requestStatus";
-import { getServiceImage } from "@/lib/serviceImages";
 import Reveal from "@/components/motion/Reveal";
 import MotionPress from "@/components/motion/MotionPress";
 
-interface RequestCardProps {
+const iconMap = {
+  Wrench,
+  Zap,
+  Snowflake,
+  Fan,
+  Paintbrush,
+  Refrigerator,
+};
+
+interface HistoryRequestRowProps {
   request: {
     id: string;
     title: string;
     status: RequestStatusType;
     preferredDate: Date;
-    preferredTime: string;
-    category: { name: string; icon: string };
+    estimatedPrice: number | null;
+    finalPrice: number | null;
+    category: { name: string; icon: string; basePrice: number };
   };
   index?: number;
 }
 
-const RequestCard = ({ request, index = 0 }: RequestCardProps) => {
+const HistoryRequestRow = ({ request, index = 0 }: HistoryRequestRowProps) => {
+  const Icon = iconMap[request.category.icon as keyof typeof iconMap] ?? Wrench;
+  const price = request.finalPrice ?? request.estimatedPrice ?? request.category.basePrice;
+
   return (
     <Reveal
-      delay={index * 0.06}
+      delay={index * 0.05}
       className="flex flex-wrap items-center gap-4 rounded-xl border border-border p-4"
     >
-      <Image
-        src={getServiceImage(request.category.icon)}
-        alt={request.category.name}
-        width={56}
-        height={56}
-        className="h-14 w-14 shrink-0 rounded-lg object-cover"
-      />
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10">
+        <Icon className="h-5.5 w-5.5 text-primary" />
+      </div>
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-text">
-          {request.category.name}{" "}
-          <span className="font-normal text-muted">- {request.title}</span>
+          {request.category.name}
         </p>
+        <p className="truncate text-xs text-muted">{request.title}</p>
         <p className="mt-1 text-xs text-muted">
           {new Date(request.preferredDate).toLocaleDateString("en-GB", {
             day: "numeric",
             month: "short",
+            year: "numeric",
           })}
-          , {request.preferredTime}
         </p>
       </div>
 
       <RequestStatus status={request.status} />
+
+      <p className="w-16 text-right text-sm font-semibold text-text">
+        ৳{price}
+      </p>
 
       <MotionPress className="inline-block">
         <Link
@@ -61,4 +80,4 @@ const RequestCard = ({ request, index = 0 }: RequestCardProps) => {
   );
 };
 
-export default RequestCard;
+export default HistoryRequestRow;
