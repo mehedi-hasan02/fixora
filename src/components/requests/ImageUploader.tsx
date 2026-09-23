@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { UploadCloud, X } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -96,27 +97,36 @@ const ImageUploader = () => {
 
       {previews.length > 0 && (
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
-          {previews.map((src, index) => (
-            <div
-              key={src}
-              className="relative aspect-square overflow-hidden rounded-lg border"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element -- blob: preview URLs can't be optimized by next/image */}
-              <img
-                src={src}
-                alt="Problem preview"
-                className="h-full w-full object-cover"
-              />
-              <button
-                type="button"
-                onClick={() => removeAt(index)}
-                className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white"
-                aria-label="Remove image"
+          <AnimatePresence>
+            {previews.map((src, index) => (
+              <motion.div
+                key={src}
+                layout
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.85 }}
+                transition={{ duration: 0.2 }}
+                className="relative aspect-square overflow-hidden rounded-lg border"
               >
-                <X size={14} />
-              </button>
-            </div>
-          ))}
+                {/* eslint-disable-next-line @next/next/no-img-element -- blob: preview URLs can't be optimized by next/image */}
+                <img
+                  src={src}
+                  alt="Problem preview"
+                  className="h-full w-full object-cover"
+                />
+                <motion.button
+                  type="button"
+                  onClick={() => removeAt(index)}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white"
+                  aria-label="Remove image"
+                >
+                  <X size={14} />
+                </motion.button>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       )}
     </div>

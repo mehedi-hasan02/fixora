@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useFormContext } from "react-hook-form";
 
 const slots = ["9 AM - 11 AM", "11 AM - 1 PM", "2 PM - 4 PM", "4 PM - 6 PM"];
@@ -63,18 +64,21 @@ const SchedulePicker = () => {
                 })}
               />
 
-              <div
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 className="
                                 rounded-lg
                                 border
                                 p-3
                                 text-center
+                                transition-colors
                                 peer-checked:border-primary
                                 peer-checked:bg-primary/10
                                 "
               >
                 {slot}
-              </div>
+              </motion.div>
             </label>
           ))}
         </div>

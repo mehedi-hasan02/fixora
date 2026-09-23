@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Wrench, Zap, Snowflake, Fan, Paintbrush, Refrigerator } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import type { ServiceCategoryModel } from "../../../generated/prisma/models";
@@ -42,12 +43,14 @@ const ServiceSelector = ({ categories }: ServiceSelectorProps) => {
                 })}
               />
 
-              <div
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 className="
                                 flex items-center gap-3
                                 rounded-xl border
                                 p-4
-                                transition
+                                transition-colors
                                 peer-checked:border-primary
                                 peer-checked:bg-primary/10
                             "
@@ -55,7 +58,7 @@ const ServiceSelector = ({ categories }: ServiceSelectorProps) => {
                 <Icon size={24} />
 
                 <span>{category.name}</span>
-              </div>
+              </motion.div>
             </label>
           );
         })}

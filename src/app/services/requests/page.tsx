@@ -7,6 +7,7 @@ import {
   getServiceCategories,
   getServiceCategoryById,
 } from "@/action/server/services";
+import Reveal from "@/components/motion/Reveal";
 
 type PageProps = {
   searchParams: Promise<{
@@ -41,7 +42,7 @@ const Page = async ({ searchParams }: PageProps) => {
       <div className="mx-auto max-w-3xl">
         {/* Header */}
 
-        <div className="mb-8">
+        <Reveal className="mb-8">
           <h1 className="text-3xl font-bold">Request a Service</h1>
 
           <p className="mt-2 text-base-content/60">
@@ -49,11 +50,12 @@ const Page = async ({ searchParams }: PageProps) => {
               ? `Book ${selectedService.name} service`
               : "Tell us about your problem and we will help you find the right service."}
           </p>
-        </div>
+        </Reveal>
 
         {/* Request Form */}
 
-        <div
+        <Reveal
+          delay={0.05}
           className="
           rounded-2xl
           bg-base-100
@@ -62,7 +64,7 @@ const Page = async ({ searchParams }: PageProps) => {
         "
         >
           <RequestForm service={selectedService} categories={categories} />
-        </div>
+        </Reveal>
       </div>
     </main>
   );

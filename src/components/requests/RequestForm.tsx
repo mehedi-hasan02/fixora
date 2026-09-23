@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
+import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 
 import ServiceSelector from "./ServiceSelector";
@@ -10,6 +11,7 @@ import ImageUploader from "./ImageUploader";
 import SchedulePicker from "./SchedulePicker";
 import type { ServiceCategoryModel } from "../../../generated/prisma/models";
 import { createServiceRequest } from "@/action/server/requests";
+import Reveal from "@/components/motion/Reveal";
 
 type RequestFormProps = {
   service?: ServiceCategoryModel | null;
@@ -68,7 +70,7 @@ const RequestForm = ({ service, categories }: RequestFormProps) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Selected service from services/[id] */}
         {service ? (
-          <div
+          <Reveal
             className="
           rounded-xl
           border
@@ -93,34 +95,44 @@ const RequestForm = ({ service, categories }: RequestFormProps) => {
                 {service.estimatedDuration}
               </span>
             </div>
-          </div>
+          </Reveal>
         ) : (
           /*
             User does not know service category
             Admin will decide later
           */
-          <ServiceSelector categories={categories} />
+          <Reveal>
+            <ServiceSelector categories={categories} />
+          </Reveal>
         )}
 
         {/* Problem Details */}
-        <ProblemDescription />
+        <Reveal delay={0.05}>
+          <ProblemDescription />
+        </Reveal>
 
         {/* Upload Problem Image */}
-        <ImageUploader />
+        <Reveal delay={0.1}>
+          <ImageUploader />
+        </Reveal>
 
         {/* Address + Date + Time */}
-        <SchedulePicker />
+        <Reveal delay={0.15}>
+          <SchedulePicker />
+        </Reveal>
 
         {/* Submit */}
-        <div className="flex justify-end">
-          <button
+        <Reveal delay={0.2} className="flex justify-end">
+          <motion.button
             type="submit"
             disabled={isSubmitting}
+            whileHover={!isSubmitting ? { scale: 1.03 } : undefined}
+            whileTap={!isSubmitting ? { scale: 0.97 } : undefined}
             className="btn btn-primary disabled:opacity-60"
           >
             {isSubmitting ? "Submitting..." : "Submit Request"}
-          </button>
-        </div>
+          </motion.button>
+        </Reveal>
       </form>
     </FormProvider>
   );

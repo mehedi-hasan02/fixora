@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import authOptions from "@/lib/authOptions";
 import { getDashboardStats, getUserRequests } from "@/action/server/requests";
 import RequestList from "@/components/requests/RequestList";
+import Reveal from "@/components/motion/Reveal";
+import MotionPress from "@/components/motion/MotionPress";
 
 const DashboardPage = async () => {
   const session = await getServerSession(authOptions);
@@ -27,7 +29,7 @@ const DashboardPage = async () => {
   return (
     <main className="min-h-screen bg-card px-6 py-10 lg:px-8">
       <div className="mx-auto max-w-5xl">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+        <Reveal className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-primary">
               Welcome back, {session.user?.name}
@@ -38,10 +40,12 @@ const DashboardPage = async () => {
             </p>
           </div>
 
-          <Link href="/services/requests" className="btn btn-primary">
-            New Request
-          </Link>
-        </div>
+          <MotionPress className="inline-block">
+            <Link href="/services/requests" className="btn btn-primary">
+              New Request
+            </Link>
+          </MotionPress>
+        </Reveal>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
@@ -49,20 +53,21 @@ const DashboardPage = async () => {
             { label: "Pending", value: stats.pending },
             { label: "In Progress", value: stats.inProgress },
             { label: "Completed", value: stats.completed },
-          ].map((stat) => (
-            <div
+          ].map((stat, index) => (
+            <Reveal
               key={stat.label}
+              delay={index * 0.08}
               className="rounded-2xl border border-border p-5"
             >
               <p className="text-sm text-muted">{stat.label}</p>
               <p className="mt-2 text-2xl font-bold text-primary">
                 {stat.value}
               </p>
-            </div>
+            </Reveal>
           ))}
         </div>
 
-        <div className="mt-8 rounded-2xl border border-border p-6">
+        <Reveal delay={0.1} className="mt-8 rounded-2xl border border-border p-6">
           <h2 className="text-lg font-semibold text-primary">
             Recent requests
           </h2>
@@ -70,7 +75,7 @@ const DashboardPage = async () => {
           <div className="mt-4">
             <RequestList requests={recentRequests} />
           </div>
-        </div>
+        </Reveal>
       </div>
     </main>
   );

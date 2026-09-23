@@ -13,8 +13,8 @@ const RequestList = ({ requests }: RequestListProps) => {
           No service requests found.
         </div>
       ) : (
-        requests.map((request) => (
-          <RequestCard key={request.id} request={request} />
+        requests.map((request, index) => (
+          <RequestCard key={request.id} request={request} index={index} />
         ))
       )}
     </div>

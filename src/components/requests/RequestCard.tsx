@@ -3,6 +3,8 @@ import { ArrowRight } from "lucide-react";
 
 import RequestStatus from "./RequestStatus";
 import type { RequestStatus as RequestStatusType } from "@/lib/requestStatus";
+import Reveal from "@/components/motion/Reveal";
+import MotionPress from "@/components/motion/MotionPress";
 
 interface RequestCardProps {
   request: {
@@ -12,11 +14,13 @@ interface RequestCardProps {
     preferredDate: Date;
     category: { name: string };
   };
+  index?: number;
 }
 
-const RequestCard = ({ request }: RequestCardProps) => {
+const RequestCard = ({ request, index = 0 }: RequestCardProps) => {
   return (
-    <div
+    <Reveal
+      delay={index * 0.06}
       className="
 rounded-xl
 border
@@ -46,9 +50,10 @@ shadow-sm
         </strong>
       </div>
 
-      <Link
-        href={`/dashboard/requests/${request.id}`}
-        className="
+      <MotionPress className="inline-block">
+        <Link
+          href={`/dashboard/requests/${request.id}`}
+          className="
 btn
 btn-sm
 btn-outline
@@ -56,11 +61,12 @@ mt-4
 flex
 gap-2
 "
-      >
-        View Details
-        <ArrowRight size={16} />
-      </Link>
-    </div>
+        >
+          View Details
+          <ArrowRight size={16} />
+        </Link>
+      </MotionPress>
+    </Reveal>
   );
 };
 
