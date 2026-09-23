@@ -6,7 +6,7 @@ const ServiceGrid = async () => {
 
   return (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {categories.map((category) => (
+      {categories.map((category, index) => (
         <ServiceCard
           key={category.id}
           id={category.id}
@@ -15,6 +15,7 @@ const ServiceGrid = async () => {
           price={`৳${category.basePrice}`}
           duration={category.estimatedDuration}
           icon={category.icon}
+          index={index}
         />
       ))}
     </div>

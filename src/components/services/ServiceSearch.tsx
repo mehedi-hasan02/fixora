@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 
 const ServiceSearch = () => {
@@ -13,9 +14,13 @@ const ServiceSearch = () => {
         className="h-12 flex-1 bg-transparent px-4 text-sm text-primary outline-none placeholder:text-muted"
       />
 
-      <button className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-primary-hover">
+      <motion.button
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
+        className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+      >
         Search
-      </button>
+      </motion.button>
     </div>
   );
 };

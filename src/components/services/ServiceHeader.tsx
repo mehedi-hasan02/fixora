@@ -1,6 +1,8 @@
+import Reveal from "@/components/motion/Reveal";
+
 const ServiceHeader = () => {
   return (
-    <div className="mb-10">
+    <Reveal className="mb-10">
       <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-primary">
         Our services
       </p>
@@ -13,7 +15,7 @@ const ServiceHeader = () => {
         Choose a service that matches your problem and get started in just a few
         steps.
       </p>
-    </div>
+    </Reveal>
   );
 };
 

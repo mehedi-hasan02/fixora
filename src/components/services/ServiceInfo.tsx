@@ -1,5 +1,7 @@
 import { Search, UserRoundCheck, CalendarCheck } from "lucide-react";
 
+import Reveal from "@/components/motion/Reveal";
+
 const steps = [
   {
     number: "01",
@@ -25,7 +27,7 @@ const ServiceInfo = () => {
   return (
     <section className="border-t bg-background">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
+        <Reveal className="mx-auto max-w-2xl text-center">
           <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-primary">
             Simple process
           </p>
@@ -37,14 +39,14 @@ const ServiceInfo = () => {
           <p className="mt-4 text-muted">
             Getting your home problem fixed is simple.
           </p>
-        </div>
+        </Reveal>
 
         <div className="mt-14 grid gap-10 md:grid-cols-3">
-          {steps.map((step) => {
+          {steps.map((step, index) => {
             const Icon = step.icon;
 
             return (
-              <div key={step.number} className="text-center">
+              <Reveal key={step.number} className="text-center" delay={index * 0.1}>
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-card shadow-sm ring-1 ring-border">
                   <Icon className="h-6 w-6 text-text" />
                 </div>
@@ -60,7 +62,7 @@ const ServiceInfo = () => {
                 <p className="mx-auto mt-2 max-w-xs text-sm leading-6 text-muted">
                   {step.description}
                 </p>
-              </div>
+              </Reveal>
             );
           })}
         </div>
