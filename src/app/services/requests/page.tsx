@@ -39,30 +39,20 @@ const Page = async ({ searchParams }: PageProps) => {
 
   return (
     <main className="min-h-screen bg-base-200 px-4 py-10">
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto max-w-5xl">
         {/* Header */}
 
         <Reveal className="mb-8">
           <h1 className="text-3xl font-bold">Request a Service</h1>
 
           <p className="mt-2 text-base-content/60">
-            {selectedService
-              ? `Book ${selectedService.name} service`
-              : "Tell us about your problem and we will help you find the right service."}
+            Tell us about the problem and we&apos;ll take care of the rest.
           </p>
         </Reveal>
 
         {/* Request Form */}
 
-        <Reveal
-          delay={0.05}
-          className="
-          rounded-2xl
-          bg-base-100
-          p-6
-          shadow-md
-        "
-        >
+        <Reveal delay={0.05}>
           <RequestForm service={selectedService} categories={categories} />
         </Reveal>
       </div>

@@ -1,5 +1,7 @@
 "use client";
 
+// src/components/requests/wizard/StepPhotos.tsx
+
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { UploadCloud, X } from "lucide-react";
@@ -8,7 +10,7 @@ import { toast } from "react-toastify";
 
 import { validateImageFile, MAX_REQUEST_IMAGES } from "@/lib/imageValidation";
 
-const ImageUploader = () => {
+const StepPhotos = () => {
   const { register } = useFormContext();
   const [previews, setPreviews] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -59,22 +61,14 @@ const ImageUploader = () => {
   };
 
   return (
-    <div className="space-y-3">
-      <label className="font-semibold">Upload Problem Image</label>
+    <div className="space-y-4">
+      <h2 className="text-lg font-bold">Upload Photos</h2>
 
-      <div
-        className="
-                flex
-                flex-col
-                items-center
-                justify-center
-                rounded-xl
-                border-2
-                border-dashed
-                p-8
-            "
+      <label
+        htmlFor="request-photos"
+        className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-base-300 p-8 text-center transition-colors hover:border-primary"
       >
-        <UploadCloud size={40} />
+        <UploadCloud className="size-10 text-base-content/40" />
 
         <p className="mt-3 text-sm text-base-content/60">
           Upload up to {MAX_REQUEST_IMAGES} photos (JPG, PNG, WEBP, max 5MB
@@ -82,10 +76,11 @@ const ImageUploader = () => {
         </p>
 
         <input
+          id="request-photos"
           type="file"
           accept="image/jpeg,image/png,image/webp"
           multiple
-          className="file-input file-input-bordered mt-4"
+          className="hidden"
           {...restRegister}
           ref={(el) => {
             rhfRef(el);
@@ -93,7 +88,7 @@ const ImageUploader = () => {
           }}
           onChange={handleChange}
         />
-      </div>
+      </label>
 
       {previews.length > 0 && (
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
@@ -106,7 +101,7 @@ const ImageUploader = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.85 }}
                 transition={{ duration: 0.2 }}
-                className="relative aspect-square overflow-hidden rounded-lg border"
+                className="relative aspect-square overflow-hidden rounded-lg border border-base-300"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element -- blob: preview URLs can't be optimized by next/image */}
                 <img
@@ -133,4 +128,4 @@ const ImageUploader = () => {
   );
 };
 
-export default ImageUploader;
+export default StepPhotos;

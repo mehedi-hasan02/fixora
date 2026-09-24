@@ -21,6 +21,7 @@ const NAV_CONFIG = {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/dashboard#requests", label: "My Requests", icon: ListChecks },
     { href: "/dashboard/history", label: "History", icon: History },
+    { href: "/dashboard/profile", label: "Profile", icon: UserCircle },
     { href: "/services/requests", label: "New Request", icon: PlusCircle },
   ],
   admin: [
@@ -33,7 +34,6 @@ const NAV_CONFIG = {
 // the mockup without linking to pages that don't exist.
 const DASHBOARD_SOON_ITEMS = [
   { label: "Notifications", icon: Bell },
-  { label: "Profile", icon: UserCircle },
 ] as const;
 
 type SidebarProps = {
