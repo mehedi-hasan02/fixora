@@ -4,7 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { Menu, X, Wrench, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
+import {
+  Menu,
+  X,
+  Wrench,
+  LayoutDashboard,
+  LogOut,
+  ShieldCheck,
+} from "lucide-react";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -19,7 +26,7 @@ const Navbar = () => {
     : [
         { href: "/", label: "Home" },
         { href: "/services", label: "Services" },
-        { href: "/services/requests", label: "Request Service" },
+        // { href: "/services/requests", label: "Request Service" },
       ];
 
   const isActive = (href: string) => pathname === href;
@@ -37,7 +44,10 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
         {/* Logo */}
-        <Link href={isAdmin ? "/admin" : "/"} className="flex items-center gap-2">
+        <Link
+          href={isAdmin ? "/admin" : "/"}
+          className="flex items-center gap-2"
+        >
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white">
             <Wrench className="h-4.5 w-4.5" />
           </div>

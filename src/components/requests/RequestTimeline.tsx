@@ -1,7 +1,8 @@
-import { CheckCircle2, Circle, XCircle } from "lucide-react";
+import { Check, XCircle } from "lucide-react";
 import {
   STATUS_LABELS,
   TIMELINE_STEPS,
+  TIMELINE_STEP_LABELS,
   type RequestStatus,
 } from "@/lib/requestStatus";
 
@@ -24,23 +25,50 @@ const RequestTimeline = ({ status }: Props) => {
   const currentIndex = TIMELINE_STEPS.indexOf(status);
 
   return (
-    <div className="space-y-4">
+    <div className="flex min-w-max items-start overflow-x-auto sm:min-w-0">
       {TIMELINE_STEPS.map((step, index) => {
-        const isDone = index <= currentIndex;
+        const isDone = index < currentIndex;
+        const isCurrent = index === currentIndex;
+        const isLast = index === TIMELINE_STEPS.length - 1;
 
         return (
-          <div key={step} className="flex items-center gap-3">
-            {isDone ? (
-              <CheckCircle2 className="size-5 shrink-0 text-success" />
-            ) : (
-              <Circle className="size-5 shrink-0 text-muted" />
-            )}
+          <div
+            key={step}
+            className={`flex items-center ${isLast ? "" : "flex-1"}`}
+          >
+            <div className="flex flex-col items-center gap-2 px-1">
+              <div
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white ${
+                  isDone
+                    ? "bg-success"
+                    : isCurrent
+                      ? "bg-primary ring-4 ring-primary/20"
+                      : "border-2 border-border bg-card text-muted"
+                }`}
+              >
+                {isDone ? (
+                  <Check className="size-4" />
+                ) : isCurrent ? (
+                  <span className="h-2 w-2 rounded-full bg-white" />
+                ) : null}
+              </div>
 
-            <span
-              className={isDone ? "font-medium text-text" : "text-muted"}
-            >
-              {STATUS_LABELS[step]}
-            </span>
+              <span
+                className={`whitespace-nowrap text-xs font-medium ${
+                  isDone || isCurrent ? "text-text" : "text-muted"
+                }`}
+              >
+                {TIMELINE_STEP_LABELS[step]}
+              </span>
+            </div>
+
+            {!isLast && (
+              <div
+                className={`mb-5 h-0.5 min-w-8 flex-1 ${
+                  index < currentIndex ? "bg-success" : "bg-border"
+                }`}
+              />
+            )}
           </div>
         );
       })}

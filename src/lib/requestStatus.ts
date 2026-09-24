@@ -45,6 +45,13 @@ export const TIMELINE_STEPS: RequestStatus[] = [
   "COMPLETED",
 ];
 
+// Step labels for the timeline only — "Submitted" reads better than
+// "Pending" as the first step of a progress tracker.
+export const TIMELINE_STEP_LABELS: Record<RequestStatus, string> = {
+  ...STATUS_LABELS,
+  PENDING: "Submitted",
+};
+
 // Server-side guard against invalid transitions (e.g. PENDING -> COMPLETED).
 export const ALLOWED_TRANSITIONS: Record<RequestStatus, RequestStatus[]> = {
   PENDING: ["REVIEWING", "CANCELLED"],

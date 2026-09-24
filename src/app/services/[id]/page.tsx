@@ -8,10 +8,7 @@ import { ArrowLeft, Wrench } from "lucide-react";
 import authOptions from "@/lib/authOptions";
 import { getServiceCategoryById } from "@/action/server/services";
 import ServiceDetailHeader from "@/components/services/details/ServiceDetailHeader";
-import ServiceDetailInfo from "@/components/services/details/ServiceDetailInfo";
-import ServiceFeatures from "@/components/services/details/ServiceFeatures";
-import ServiceHowItWorks from "@/components/services/details/ServiceHowItWorks";
-import ServiceRequestCard from "@/components/services/details/ServiceRequestCard";
+import ServiceDetailTabs from "@/components/services/details/ServiceDetailTabs";
 
 type PageProps = {
   params: Promise<{
@@ -56,17 +53,7 @@ const Page = async ({ params }: PageProps) => {
       <ServiceDetailHeader service={service} />
 
       <section className="mx-auto max-w-6xl px-4 py-10">
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div className="space-y-8 lg:col-span-2">
-            <ServiceDetailInfo service={service} />
-
-            <ServiceFeatures features={service.features} />
-
-            <ServiceHowItWorks service={service} />
-          </div>
-
-          <ServiceRequestCard service={service} />
-        </div>
+        <ServiceDetailTabs service={service} />
       </section>
     </main>
   );
