@@ -91,6 +91,7 @@ const WhyChooseFixora = () => {
               src="/images/home/living-room.jpg"
               alt="A well-maintained home"
               fill
+              sizes="33vw"
               className="object-cover"
             />
           </div>

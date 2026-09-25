@@ -53,10 +53,16 @@ const AdminStatusForm = ({
 
   const nextOptions = ALLOWED_TRANSITIONS[currentStatus];
   const selectedStatus = useWatch({ control, name: "status" });
+  const isCompleting = selectedStatus === "COMPLETED";
 
   const onSubmit = async (data: FormValues) => {
     if (!data.status) {
       toast.error("Please select a status to move this request to.");
+      return;
+    }
+
+    if (data.status === "COMPLETED" && !data.finalPrice && !finalPrice) {
+      toast.error("Please enter the final price before marking this request as completed.");
       return;
     }
 
@@ -129,12 +135,19 @@ const AdminStatusForm = ({
         </div>
 
         <div>
-          <label className="text-sm font-medium">Final Price (৳)</label>
+          <label className="text-sm font-medium">
+            Final Price (৳){isCompleting && <span className="text-error"> *</span>}
+          </label>
           <input
             type="number"
             className="input input-bordered mt-2 w-full"
             {...register("finalPrice")}
           />
+          {isCompleting && !finalPrice && (
+            <p className="mt-1 text-xs text-muted">
+              Required to mark this request as completed.
+            </p>
+          )}
         </div>
       </div>
 

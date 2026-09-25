@@ -40,6 +40,7 @@ const AboutFixora = async () => {
             src="/images/home/about.jpg"
             alt="A Fixora technician beside a Fixora service van"
             fill
+            sizes="(min-width: 1024px) 33vw, 100vw"
             className="object-cover"
           />
         </Reveal>

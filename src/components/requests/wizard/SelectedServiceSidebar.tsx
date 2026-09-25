@@ -37,6 +37,7 @@ const SelectedServiceSidebar = ({
                 src={getServiceImage(service.icon)}
                 alt={service.name}
                 fill
+                sizes="(min-width: 1024px) 33vw, 100vw"
                 className="object-cover"
               />
             </div>

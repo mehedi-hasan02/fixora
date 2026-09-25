@@ -8,10 +8,29 @@ import {
   type RequestStatus,
 } from "../../lib/requestStatus";
 
-export const getAllRequests = async () => {
+type GetAllRequestsFilters = {
+  status?: RequestStatus;
+  search?: string;
+};
+
+export const getAllRequests = async (filters: GetAllRequestsFilters = {}) => {
   await requireAdmin();
 
+  const { status, search } = filters;
+
   return prisma.serviceRequest.findMany({
+    where: {
+      ...(status ? { status } : {}),
+      ...(search
+        ? {
+            OR: [
+              { title: { contains: search, mode: "insensitive" } },
+              { user: { name: { contains: search, mode: "insensitive" } } },
+              { category: { name: { contains: search, mode: "insensitive" } } },
+            ],
+          }
+        : {}),
+    },
     include: { category: true, user: true },
     orderBy: { createdAt: "desc" },
   });
@@ -149,6 +168,15 @@ export const updateRequestStatus = async (input: UpdateRequestStatusInput) => {
     return {
       success: false as const,
       error: `Cannot change status from ${existing.status} to ${status}.`,
+    };
+  }
+
+  const effectiveFinalPrice = finalPrice ?? existing.finalPrice ?? undefined;
+
+  if (status === "COMPLETED" && !effectiveFinalPrice) {
+    return {
+      success: false as const,
+      error: "Final price is required to mark a request as completed.",
     };
   }
 

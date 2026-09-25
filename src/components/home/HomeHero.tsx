@@ -17,6 +17,7 @@ const HomeHero = ({ categories }: Props) => {
           alt=""
           fill
           priority
+          sizes="100vw"
           className="object-cover object-[80%_center]"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/95 to-navy/20 sm:to-navy/10" />

@@ -64,6 +64,8 @@ const ServiceCard = ({
             src={getServiceImage(icon)}
             alt=""
             fill
+            priority={index < 4}
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />

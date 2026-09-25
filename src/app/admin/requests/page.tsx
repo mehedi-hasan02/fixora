@@ -5,8 +5,19 @@ import { redirect } from "next/navigation";
 import authOptions from "@/lib/authOptions";
 import { getAllRequests } from "@/action/server/admin";
 import RequestStatus from "@/components/requests/RequestStatus";
+import RequestFilters from "@/components/admin/RequestFilters";
+import type { RequestStatus as RequestStatusType } from "@/lib/requestStatus";
 
-const AdminRequestsPage = async () => {
+type PageProps = {
+  searchParams: Promise<{
+    status?: string;
+    search?: string;
+  }>;
+};
+
+const AdminRequestsPage = async ({ searchParams }: PageProps) => {
+  const { status, search } = await searchParams;
+
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -17,7 +28,10 @@ const AdminRequestsPage = async () => {
     redirect("/dashboard");
   }
 
-  const requests = await getAllRequests();
+  const requests = await getAllRequests({
+    status: status as RequestStatusType | undefined,
+    search,
+  });
 
   return (
     <main className="min-h-screen bg-card px-6 py-10 lg:px-8">
@@ -29,7 +43,11 @@ const AdminRequestsPage = async () => {
           Review, approve, and manage all incoming service requests.
         </p>
 
-        <div className="mt-8 overflow-x-auto rounded-2xl border border-border">
+        <div className="mt-6">
+          <RequestFilters />
+        </div>
+
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-border">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-border bg-background">
               <tr>
@@ -46,7 +64,9 @@ const AdminRequestsPage = async () => {
               {requests.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-4 py-8 text-center text-muted">
-                    No service requests yet.
+                    {status || search
+                      ? "No requests match your filters."
+                      : "No service requests yet."}
                   </td>
                 </tr>
               ) : (
